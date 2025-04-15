@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="इस ऑनलाइन टूल से टेक्स्ट को सुंदर 3D एनीमेशन में बदलें।">
+    <meta name="keywords" content="3D एनीमेशन, टेक्स्ट से एनीमेशन, डायनामिक एनीमेशन टूल">
+    <meta name="author" content="आपका नाम या कंपनी">
+    <title>3D एनीमेशन जेनरेटर टूल</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta property="og:title" content="3D एनीमेशन जेनरेटर टूल">
+    <meta property="og:description" content="टेक्स्ट को 3D एनीमेशन में बदलने का टूल">
+    <meta property="og:image" content="thumbnail_image.jpg">
+    <meta property="og:url" content="https://www.yourwebsite.com">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .animation-tool {
+            margin-top: 20px;
+        }
+
+        .text-input textarea {
+            width: 60%;
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .adsense {
+            margin-top: 30px;
+            display: block;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>3D एनीमेशन जेनरेटर टूल में आपका स्वागत है</h1>
+        <p>अपने टेक्स्ट को बदलें और बनाएं शानदार 3D एनीमेशन</p>
+    </header>
+    
+    <section class="animation-tool">
+        <div class="text-input">
+            <textarea id="textInput" placeholder="यहां अपना टेक्स्ट डालें और 3D एनीमेशन बनाएं..."></textarea>
+            <button id="generateAnimation">एनीमेशन जनरेट करें</button>
+        </div>
+        <div id="animationContainer"></div>
+    </section>
+
+    <section class="adsense-section">
+        <div class="adsense">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="YOUR_AD_CLIENT_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 आपकी कंपनी. सर्वाधिकार सुरक्षित।</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let generateButton = document.getElementById("generateAnimation");
+
+        generateButton.addEventListener("click", function() {
+            let userText = document.getElementById("textInput").value;
+            if (userText.trim() === "") {
+                alert("कृपया कुछ टेक्स्ट डालें।");
+                return;
+            }
+            
+            // 3D Scene शुरू करें
+            let scene = new THREE.Scene();
+            let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            let renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById("animationContainer").appendChild(renderer.domElement);
+
+            // यूज़र द्वारा डाले गए टेक्स्ट के साथ एक Text Geometry बनाएं
+            let loader = new THREE.FontLoader();
+            loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+                let textGeometry = new THREE.TextGeometry(userText, {
+                    font: font,
+                    size: 10,
+                    height: 1,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.5,
+                    bevelSize: 0.5
+                });
+                let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                let textMesh = new THREE.Mesh(textGeometry, material);
+                scene.add(textMesh);
+
+                // कैमरे को पोजीशन करें
+                camera.position.z = 50;
+
+                let animate = function () {
+                    requestAnimationFrame(animate);
+                    textMesh.rotation.x += 0.01;
+                    textMesh.rotation.y += 0.01;
+                    renderer.render(scene, camera);
+                };
+
+                animate();
+            });
+        });
+    </script>
+</body>
+</html>
